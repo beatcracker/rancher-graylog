@@ -6,7 +6,7 @@ This `docker-compose.yml` file is aimed to quickly deploy Graylog instance in de
 
 * Use Rancher metadata to correctly bind [rest_transport_uri](http://docs.graylog.org/en/2.2/pages/configuration/web_interface.html) to Rancher host IP.
 * Download and install Graylog plugins from GitHub.
-* Download and [MaxMind GeoLite2 database](http://dev.maxmind.com/geoip/geoip2/geolite2/) and update it on a schedule.
+* Download [MaxMind GeoLite2 database](http://dev.maxmind.com/geoip/geoip2/geolite2/) and update it on a schedule.
 * Disable Graylog's built-in telemetry plugin.
 
 ## Batteries included
