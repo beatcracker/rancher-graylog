@@ -1,0 +1,121 @@
+version: '2'
+services:
+  graylog2:
+    image: graylog2/server
+    stdin_open: true
+    tty: true
+    environment:
+      GRAYLOG_PASSWORD_SECRET: 'somepasswordpepper'
+      GRAYLOG_ROOT_PASSWORD_SHA2: '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918'
+      
+      # Make sure this port is exposed in 'ports:'
+      REST_TRANSPORT_URI_PORT: '9000'
+      DISABLE_TELEMETRY: '1'
+      PLUGINS: |-
+        graylog-labs/graylog-plugin-slack
+        cvtienhoven/graylog-plugin-aggregates
+    volumes_from:
+      - geoip-data
+    volumes:
+      - /graylog/data/journal
+      - /graylog/config
+    ports:
+      # WebUI
+      - 9000:9000/tcp
+      # UDP/TCP collectors
+      - 12201:12201/udp
+      - 12201:12201/tcp
+    command:
+      - bash
+      - -c
+      - >
+          echo 'Starting custom init script...' ;
+
+          IP=$$(curl -s http://rancher-metadata/latest/self/host/agent_ip) ;
+
+          if [[ ! -z "$$IP" ]] ;
+          then
+            echo "Configuring 'rest_transport_uri' to use Rancher's host IP: $$IP" ;
+            sed -i -E "s@#(rest_transport_uri).*@\1 = http://$$IP:$$REST_TRANSPORT_URI_PORT/api/@g" ./data/config/graylog.conf ;
+          fi ;
+
+          PLUGIN_DIR='./plugin' ;
+          PLUGIN_PREFIX='custom' ;
+
+          if [[ "$$DISABLE_TELEMETRY" == '1' ]] ;
+          then
+            echo 'Removing telemetry plugin:' ;
+            rm -f -v "$$PLUGIN_DIR"/graylog-plugin-anonymous-usage-statistics-*.jar ;
+          fi ;
+
+          echo 'Removing existing custom plugins:' ;
+          rm -f -v "$$PLUGIN_DIR"/"$$PLUGIN_PREFIX"-*.jar ;
+
+          PLUGINS=($$PLUGINS) ;
+          for plugin in "$${PLUGINS[@]}" ;
+          do
+            FILE_URL=$$(wget -q -O- "https://api.github.com/repos/$$plugin/releases" | grep -P -o '"browser_download_url":\s+\K"(.+\.jar)"' | head -n 1 | tr -d '"') ;
+            FILE_NAME="$$PLUGIN_PREFIX-$$(basename $$FILE_URL)" ;
+
+            echo "Downloading plugin '$$plugin' from URL '$$FILE_URL' as '$$FILE_NAME'" ;
+            wget -nc -nv -O "$$PLUGIN_DIR/$$FILE_NAME" "$$FILE_URL" ;
+          done ;
+
+          echo 'Done, starting Graylog.' ;
+          /docker-entrypoint.sh graylog ;
+    labels:
+      io.rancher.container.pull_image: always
+      io.rancher.sidekicks: geoip-data
+  geoip-data:
+    image: tkrs/maxmind-geoipupdate
+    stdin_open: true
+    tty: true
+    volumes:
+      - /etc/graylog/server/
+    environment:
+      GEOIP_DB_DIR: '/etc/graylog/server/'
+    labels:
+      io.rancher.container.pull_image: always
+
+  mongo:
+    image: mongo
+    stdin_open: true
+    tty: true
+    mem_limit: 536870912
+    ports:
+      - 27017:27017/tcp
+    command:
+    labels:
+      io.rancher.container.pull_image: always
+      io.rancher.sidekicks: mongo-express
+  mongo-express:
+    image: mongo-express
+    stdin_open: true
+    tty: true
+    ports:
+      - 8081:8081/tcp
+    labels:
+      io.rancher.container.pull_image: always
+
+  elasticsearch:
+    image: elasticsearch:2-alpine
+    stdin_open: true
+    tty: true
+    ports:
+      - 9200:9200/tcp
+    command:
+      - elasticsearch
+      - -Des.cluster.name=graylog
+    labels:
+      io.rancher.container.pull_image: always
+      io.rancher.sidekicks: kopf
+  kopf:
+    image: lmenezes/elasticsearch-kopf
+    environment:
+      KOPF_ES_SERVERS: elasticsearch:9200
+    stdin_open: true
+    tty: true
+    ports:
+      - 8082:80/tcp
+    labels:
+      io.rancher.container.pull_image: always
