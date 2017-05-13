@@ -47,7 +47,7 @@ See docs for [graylog2/server](https://hub.docker.com/r/graylog2/server/) image 
 ## rancher-compose
 
 1. Open shell
-2. Navigate to `/path/to/rancher-graylog/graylog` folder: `cd /path/to/rancher-graylog/graylog`
+2. Navigate to `rancher-graylog/graylog` folder: `cd /path/to/rancher-graylog/graylog`
 3. Create stack: `rancher-compose create`
 
 ## Rancher UI
