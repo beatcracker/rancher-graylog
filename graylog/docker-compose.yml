@@ -84,7 +84,6 @@ services:
     mem_limit: 536870912
     ports:
       - 27017:27017/tcp
-    command:
     labels:
       io.rancher.container.pull_image: always
       io.rancher.sidekicks: mongo-express
