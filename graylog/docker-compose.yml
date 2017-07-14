@@ -111,7 +111,7 @@ services:
     image: lmenezes/elasticsearch-kopf
     environment:
       KOPF_ES_SERVERS: elasticsearch:9200
-      KOPF_SERVER_NAME: full.your-domain.com
+      #KOPF_SERVER_NAME: full.your-domain.com
     stdin_open: true
     tty: true
     ports:
