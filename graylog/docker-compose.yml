@@ -84,7 +84,6 @@ services:
     mem_limit: 536870912
     ports:
       - 27017:27017/tcp
-    command:
     labels:
       io.rancher.container.pull_image: always
       io.rancher.sidekicks: mongo-express
@@ -113,6 +112,7 @@ services:
     image: lmenezes/elasticsearch-kopf
     environment:
       KOPF_ES_SERVERS: elasticsearch:9200
+      KOPF_SERVER_NAME: full.your-domain.com
     stdin_open: true
     tty: true
     ports:
