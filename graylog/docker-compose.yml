@@ -81,7 +81,6 @@ services:
     image: mongo
     stdin_open: true
     tty: true
-    mem_limit: 536870912
     ports:
       - 27017:27017/tcp
     labels:
