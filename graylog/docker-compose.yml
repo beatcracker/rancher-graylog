@@ -10,6 +10,7 @@ services:
       
       # Make sure this port is exposed in 'ports:'
       REST_TRANSPORT_URI_PORT: '9000'
+      GRAYLOG_ELASTICSEARCH_HOSTS: 'http://elasticsearch:9200'
       DISABLE_TELEMETRY: '1'
       PLUGINS: |-
         graylog-labs/graylog-plugin-slack
