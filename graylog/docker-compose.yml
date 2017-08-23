@@ -82,8 +82,6 @@ services:
     image: mongo
     stdin_open: true
     tty: true
-    ports:
-      - 27017:27017/tcp
     labels:
       io.rancher.container.pull_image: always
       io.rancher.sidekicks: mongo-express
