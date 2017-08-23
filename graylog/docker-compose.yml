@@ -114,7 +114,10 @@ services:
       KOPF_SERVER_NAME: _
     stdin_open: true
     tty: true
-    ports:
-      - 8082:80/tcp
+
+    # Uncomment to open Kopf to the outside world
+    #ports:
+    #  - 8082:80/tcp
+
     labels:
       io.rancher.container.pull_image: always
