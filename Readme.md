@@ -42,6 +42,11 @@ PLUGINS: |-
 
 See docs for [graylog2/server](https://hub.docker.com/r/graylog2/server/) image to configure Graylog-specific environment variables.
 
+## Enabling access to KOPF & Mongo Express
+
+KOPF and Mongo Express ports are not exposed by default, since both these services are running without authentication. To enable access, uncomment relevant ports in `docker-compose.yml` (see comments in file).
+Note that you should do this only if running locally or in secure enviornment. Never expose those services to the outside world without configuring authentication and encryption.
+
 # Usage
 
 ## rancher-compose
