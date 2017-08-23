@@ -89,6 +89,11 @@ services:
     image: mongo-express
     stdin_open: true
     tty: true
+
+    # Uncomment to open Mongo Express to the outside world
+    #ports:		
+    #  - 8081:8081/tcp
+
     labels:
       io.rancher.container.pull_image: always
 
