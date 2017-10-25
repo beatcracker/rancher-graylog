@@ -13,7 +13,7 @@ This `docker-compose.yml` file is aimed to quickly deploy Graylog instance in de
 
 * [graylog2/server](https://hub.docker.com/r/graylog2/server/)
 * [mongo](https://hub.docker.com/_/mongo/) + [mongo-express](https://hub.docker.com/_/mongo-express/)
-* [elasticsearch 2](https://hub.docker.com/_/elasticsearch/) + [kopf](https://hub.docker.com/lmenezes/elasticsearch-kopf)
+* [elasticsearch 2](https://hub.docker.com/_/elasticsearch/) + [kopf](https://hub.docker.com/r/lmenezes/elasticsearch-kopf/)
 * [geoipupdate](https://hub.docker.com/r/tkrs/maxmind-geoipupdate/)
 
 ## Configuration
