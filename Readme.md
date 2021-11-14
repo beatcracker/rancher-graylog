@@ -1,4 +1,4 @@
-# Quickly deploy [Graylog](https://www.graylog.org/) in [Rancher](http://rancher.com/rancher/)
+# Quickly deploy [Graylog](https://www.graylog.org/) 2.x in [Rancher](https://rancher.com/docs/rancher/v1.6/en/) 1.6x
 
 This `docker-compose.yml` file is aimed to quickly deploy Graylog instance in development environment. 
 
